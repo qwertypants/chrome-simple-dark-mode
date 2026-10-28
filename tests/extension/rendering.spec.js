@@ -8,7 +8,7 @@ test('installed isolated engine renders, preserves media, and cleans up',async({
  const server=createServer(async(req,res)=>{try{const name=new URL(req.url,'http://local').pathname;res.setHeader('Content-Type',name.endsWith('.webm')?'video/webm':name.endsWith('.png')?'image/png':name.endsWith('.svg')?'image/svg+xml':'text/html');res.end(await readFile(path.resolve('tests/fixtures',name==='/'?'rendering.html':name.slice(1))));}catch{res.statusCode=404;res.end();}});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
  const profile=await mkdtemp(path.join(tmpdir(),'darkmode-render-'));
- const extension=path.resolve('dist');
+ const extension=path.resolve('dist-rendering-test');
  const context=await chromium.launchPersistentContext(profile,{channel:'chromium',headless:true,args:[`--disable-extensions-except=${extension}`,`--load-extension=${extension}`]});
  try{
  const worker=context.serviceWorkers()[0]||await context.waitForEvent('serviceworker');

@@ -1,1 +1,10 @@
-{"manifest_version":3,"name":"Simple Dark Mode — rendering feasibility","version":"0.1.0","description":"Development rendering shell; not a release build."}
+{
+  "manifest_version": 3,
+  "name": "Shade Toggle",
+  "version": "0.1.0",
+  "description": "One remembered dark-mode choice per website.",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "optional_host_permissions": ["*://*/*"],
+  "background": {"service_worker": "background.js"},
+  "action": {"default_title": "Shade Toggle"}
+}
