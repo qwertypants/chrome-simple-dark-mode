@@ -70,7 +70,17 @@ async function handle(message, sender) {
   const saved = await getEnabled(site.hostname);
   const access = await permitted(site);
   if (saved && !access) await reconcileSite(site);
-  return {...site, enabled: saved && access, accessNeeded: !access};
+  if (access && !fromContent) {
+    try {
+      await chrome.scripting.executeScript({target: {tabId: tab.id}, files: ['content.js']});
+      const delivery = await chrome.tabs.sendMessage(tab.id, {type: 'site:apply', hostname: site.hostname, enabled: saved});
+      if (delivery?.enabled !== saved || delivery?.renderable === false) throw Error('The page did not confirm the update.');
+    } catch {
+      return {...site, enabled: false, savedEnabled: saved, accessNeeded: false, renderable: false,
+        error: 'Chrome could not change this page. PDF viewers and protected pages are not supported.'};
+    }
+  }
+  return {...site, enabled: saved && access, savedEnabled: saved && access, accessNeeded: !access, renderable: saved && access ? true : undefined};
 }
 chrome.runtime.onMessage.addListener((message, sender, respond) => {
   if (!['site:state', 'site:set'].includes(message?.type)) return;

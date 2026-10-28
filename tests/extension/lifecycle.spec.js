@@ -1,11 +1,11 @@
 import {test, expect, chromium} from '@playwright/test';
 import {createServer} from 'node:http';
-import {mkdtemp, rm} from 'node:fs/promises';
+import {mkdtemp, rm, readFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 
 test('pre-granted lifecycle survives browser and worker restart and cleans tabs', async () => {
- const server=createServer((req,res)=>{res.setHeader('Content-Type','text/html');res.end('<html><head><style>body {background:white;color:black}</style></head><body><h1>Lifecycle fixture</h1></body></html>');});
+ const server=createServer(async(req,res)=>{if(req.url==='/document'){res.setHeader('Content-Type','application/pdf');res.end(await readFile('tests/fixtures/protected.pdf'));return;}res.setHeader('Content-Type','text/html');res.end('<html><head><style>body {background:white;color:black}</style></head><body><h1>Lifecycle fixture</h1></body></html>');});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));
  const profile=await mkdtemp(path.join(tmpdir(),'darkmode-lifecycle-'));
  const extension=path.resolve('dist-lifecycle-test');
@@ -42,8 +42,15 @@ test('pre-granted lifecycle survives browser and worker restart and cleans tabs'
  expect((await state2()).enabled).toBe(true);
  const restartedSecond=await context.newPage();await restartedSecond.goto(url);
  await expect.poll(()=>restartedSecond.locator('.darkreader').count()).toBeGreaterThan(0);
+ const pdf=await context.newPage();await pdf.goto(`${url}document`);
+ const pdfId=await control2.evaluate(async()=> (await chrome.tabs.query({})).find(t=>t.url?.endsWith('/document')).id);
+ const pdfState=await state2(undefined); // Ordinary page still works alongside the PDF.
+ expect(pdfState.enabled).toBe(true);
+ const refusedPdf=await control2.evaluate(id=>chrome.runtime.sendMessage({type:'site:set',tabId:id,hostname:'127.0.0.1',enabled:true}),pdfId);
+ expect(refusedPdf.enabled).toBe(false);expect(refusedPdf.renderable).toBe(false);expect(refusedPdf.savedEnabled).toBe(true);
+ expect((await state2()).enabled).toBe(true);
  await state2(false);
- for(const tab of context.pages().filter(p=>p.url().startsWith(url))) await expect.poll(()=>tab.locator('.darkreader').count()).toBe(0);
+ for(const tab of context.pages().filter(p=>p.url().startsWith(url)&&p!==pdf)) await expect.poll(()=>tab.locator('.darkreader').count()).toBe(0);
  expect(await control2.evaluate(()=>chrome.scripting.getRegisteredContentScripts())).toEqual([]);
 
  } finally {await context?.close();await rm(profile,{recursive:true,force:true});await new Promise(r=>server.close(r));}
