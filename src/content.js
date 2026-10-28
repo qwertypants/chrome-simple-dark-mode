@@ -10,6 +10,7 @@ const owned = node => (node.nodeType === 1 ? node : node.parentElement)?.closest
 function stopObservation() {
   observer?.disconnect();
   clearTimeout(timer);
+  timer = undefined;
 }
 function evaluate() {
   stopObservation();
@@ -24,19 +25,33 @@ function evaluate() {
     rendered = true;
   }
   observer ||= new MutationObserver(records => {
-    if (!records.some(record => !owned(record.target) && (record.type !== 'childList' || Array.prototype.some.call(record.addedNodes, node => !owned(node)) || Array.prototype.some.call(record.removedNodes, node => !owned(node))))) return;
-    clearTimeout(timer);
-    timer = setTimeout(evaluate, 120);
+    if (records.some(relevantMutation)) scheduleEvaluation();
   });
-  const options = {subtree: true, childList: true, attributes: true, attributeFilter: ['class', 'style', 'data-theme', 'data-color-mode', 'href', 'media'], characterData: true};
+  const options = {subtree: true, childList: true, attributes: true, characterData: true};
   observer.observe(document.documentElement, options);
   for (const root of result.roots) observer.observe(root, options);
 }
-const themeChange = () => {
-  if (!enabled) return;
-  clearTimeout(timer);
-  timer = setTimeout(evaluate, 120);
-};
+const primarySurface = element => element?.matches?.('html, body, main, [role="main"], style, link[rel="stylesheet"]');
+function relevantMutation(record) {
+  if (owned(record.target)) return false;
+  const element = record.target.nodeType === 1 ? record.target : record.target.parentElement;
+  if (record.type === 'attributes') {
+    if (record.attributeName.startsWith('data-darkreader')) return false;
+    return /theme|scheme|color-mode/.test(record.attributeName) || ['class', 'style'].includes(record.attributeName) || primarySurface(element);
+  }
+  if (record.type === 'characterData') return element?.tagName === 'STYLE';
+  if (element?.tagName === 'STYLE') return true;
+  // The renderer already handles ordinary text, cards and feed updates. Recheck
+  // native appearance for primary content replacement or new stylesheet signals.
+  const meaningful = node => node.nodeType === 1 && !owned(node) && (primarySurface(element) || primarySurface(node));
+  return Array.prototype.some.call(record.addedNodes, meaningful) || Array.prototype.some.call(record.removedNodes, meaningful);
+}
+function scheduleEvaluation() {
+  if (!enabled || timer !== undefined) return;
+  // A fixed deadline cannot be postponed by a busy page's later mutations.
+  timer = setTimeout(() => { timer = undefined; evaluate(); }, 120);
+}
+const themeChange = scheduleEvaluation;
 export function applyEnabled(next) {
   next = next === true && document.contentType !== 'application/pdf';
   if (next === enabled) return;
