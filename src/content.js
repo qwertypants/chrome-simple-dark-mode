@@ -5,6 +5,7 @@ let rendered = false;
 let status = 'off';
 let observer;
 let timer;
+const colorScheme = matchMedia('(prefers-color-scheme: dark)');
 const owned = node => (node.nodeType === 1 ? node : node.parentElement)?.closest?.('.darkreader');
 function stopObservation() {
   observer?.disconnect();
@@ -45,13 +46,13 @@ export function applyEnabled(next) {
     addEventListener('popstate', themeChange);
     addEventListener('hashchange', themeChange);
     addEventListener('load', themeChange, true);
-    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', themeChange);
+    colorScheme.addEventListener('change', themeChange);
   } else {
     stopObservation();
     removeEventListener('popstate', themeChange);
     removeEventListener('hashchange', themeChange);
     removeEventListener('load', themeChange, true);
-    matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', themeChange);
+    colorScheme.removeEventListener('change', themeChange);
     if (rendered) disableTheme();
     rendered = false;
     status = 'off';
