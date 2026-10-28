@@ -29,7 +29,7 @@ Manually inspect article, link, input/placeholder, menu/dialog, code, keyboard f
 
 `npm run package` rebuilds `dist/` and writes `release/shade-toggle-0.1.0.zip`. The explicit file allowlist contains production manifest/background/content/popup, four local icons, project LICENSE, THIRD_PARTY_NOTICES.md and the full bundled Dark Reader license. No test workers, localhost grants, source maps, development files, or remote scripts ship. Production has only activeTab/scripting/storage at install and optional website access. Engine network transport is disabled.
 
-Two independent build/package runs compared byte-for-byte equal using `cmp`. SHA-256 at this verification point: `fb62d576fc3ba29617a0a4ca7155bab3e4509838892cc077689601c49d9c5934` after final license/notice additions. ZIP timestamps and permissions are fixed; Python 3 and Node with installed lockfile dependencies are required.
+Two independent build/package runs compared byte-for-byte equal using `cmp`. SHA-256 at this verification point: `6a694f03f9db18d6a1fa46a1f7a675618010e2bbfd93e0d27ac1224f2a412a26` after final license/notice additions. ZIP timestamps and permissions are fixed; Python 3 and Node with installed lockfile dependencies are required.
 
 ## Homepage and publication preparation
 
@@ -45,3 +45,7 @@ store/assets/README.md. It does not verify Chrome stable or the native permissio
 Public GitHub Pages deployment and Chrome Web Store submission/approval/live installation
 have not occurred. The policy URL remains pending deployment. Owner review of publisher
 identity, final artifact, disclosures, permissions and required manual checks is outstanding.
+
+## Merge verification follow-up
+
+On the merge commit, the native-theme idle-stability test intermittently found Dark Reader's style node being replaced. Root cause: the controller captured every `load` event, including `load` events from its own injected `<style>` elements, and reevaluated native appearance. The listener now reacts only to website stylesheet `<link>` loads. After the fix, `npm run test:extension` passed 5/5, and `npx playwright test tests/extension/native-dark.spec.js --repeat-each=3` passed 3/3. The unit suite passed 5/5. The release ZIP hash was regenerated after this fix.

@@ -52,6 +52,9 @@ function scheduleEvaluation() {
   timer = setTimeout(() => { timer = undefined; evaluate(); }, 120);
 }
 const themeChange = scheduleEvaluation;
+function stylesheetLoaded(event) {
+  if (event.target?.matches?.('link[rel~="stylesheet"]') && !owned(event.target)) scheduleEvaluation();
+}
 export function applyEnabled(next) {
   next = next === true && document.contentType !== 'application/pdf';
   if (next === enabled) return;
@@ -60,13 +63,13 @@ export function applyEnabled(next) {
     evaluate();
     addEventListener('popstate', themeChange);
     addEventListener('hashchange', themeChange);
-    addEventListener('load', themeChange, true);
+    addEventListener('load', stylesheetLoaded, true);
     colorScheme.addEventListener('change', themeChange);
   } else {
     stopObservation();
     removeEventListener('popstate', themeChange);
     removeEventListener('hashchange', themeChange);
-    removeEventListener('load', themeChange, true);
+    removeEventListener('load', stylesheetLoaded, true);
     colorScheme.removeEventListener('change', themeChange);
     if (rendered) disableTheme();
     rendered = false;
