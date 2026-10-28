@@ -7,3 +7,6 @@
 /playwright-report/
 /release/
 .env*
+
+dist-rendering-test/
+dist-lifecycle-test/

@@ -6,7 +6,7 @@ setFetchMethod(async () => { throw new Error('Remote theme fetching is disabled'
 export function enableTheme() {
   enable({brightness: 100, contrast: 100, sepia: 0, grayscale: 0,
     darkSchemeBackgroundColor: '#181a1b', darkSchemeTextColor: '#e8e6e3'},
-  {disableStyleSheetsProxy: true});
+  {disableStyleSheetsProxy: true, css: `:focus-visible { outline: 3px solid #ffffff !important; outline-offset: 3px !important; }`});
 }
 
 export function disableTheme() {
