@@ -6,7 +6,8 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "test": "node --test tests/unit/*.test.js",
-    "test:extension": "npm run build && node scripts/build.mjs --rendering-test && node scripts/build.mjs --lifecycle-test && playwright test"
+    "test:extension": "npm run build && node scripts/build.mjs --rendering-test && node scripts/build.mjs --lifecycle-test && playwright test",
+    "package": "npm run build && node scripts/package.mjs"
   },
   "dependencies": {
     "darkreader": "4.9.134"

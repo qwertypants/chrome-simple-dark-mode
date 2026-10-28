@@ -1,3 +1,4 @@
+import {createHash} from 'node:crypto';
 import {build} from 'esbuild';
 import {readFile,writeFile,mkdir,rm,copyFile} from 'node:fs/promises';
 const testing = process.argv.includes('--rendering-test');
@@ -26,5 +27,7 @@ const source=await readFile('node_modules/darkreader/darkreader.mjs','utf8');
 const start=source.indexOf('        const proxyScript = createOrUpdateScript("darkreader--proxy");');
 const end=source.indexOf('        proxyScript.remove();',start);
 if(start<0||end<0) throw Error('Review upstream proxy implementation before updating Dark Reader');
+const block=source.slice(start,end+'        proxyScript.remove();'.length);
+if (createHash('sha256').update(block).digest('hex') !== 'ab40b9d45e6db84e9c95935ace44ef948f832aef0b440d123a28126cc27e5e38' || source.indexOf('        const proxyScript = createOrUpdateScript("darkreader--proxy");',start+1)!==-1) throw Error('Upstream proxy block changed; review before patching');
 const patched=source.slice(0,start)+source.slice(end+'        proxyScript.remove();'.length);
 await build({entryPoints: testing ? {'rendering':'tests/extension/rendering-entry.js'} : {'background':'src/background.js','content':'src/content.js'},bundle:true,format:'iife',outdir,plugins:[{name:'isolated-darkreader',setup(b){b.onLoad({filter:/darkreader\.mjs$/},()=>({contents:patched,loader:'js'}));}}]});
