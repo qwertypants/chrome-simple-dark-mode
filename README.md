@@ -58,8 +58,8 @@ See the measured ratios and remaining manual checks in [verification](docs/verif
 [Code of conduct](CODE_OF_CONDUCT.md) · [Changelog](CHANGELOG.md).
 
 The static homepage and privacy page are in `docs/site/`. Intended policy URL:
-https://qwertypants.github.io/chrome-simple-dark-mode/privacy.html, pending deployment.
-The Pages workflow is prepared; no deployment or store submission has occurred.
+https://qwertypants.github.io/chrome-simple-dark-mode/privacy.html, published and verified 2026-10-28.
+GitHub Pages is live. Chrome Web Store submission has not occurred.
 [Store review checklist](store/review-checklist.md) tracks the remaining release gates.
 
 Original code is [MIT licensed](LICENSE). Dark Reader's MIT notice is retained in

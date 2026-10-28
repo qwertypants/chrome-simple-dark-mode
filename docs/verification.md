@@ -43,7 +43,7 @@ of an original contrast fixture at 1280 × 800, with pregranted localhost access
 store/assets/README.md. It does not verify Chrome stable or the native permission prompt.
 
 Public GitHub Pages deployment and Chrome Web Store submission/approval/live installation
-have not occurred. The policy URL remains pending deployment. Owner review of publisher
+have not occurred. The privacy policy is live at https://qwertypants.github.io/chrome-simple-dark-mode/privacy.html and was verified on 2026-10-28. Owner review of publisher
 identity, final artifact, disclosures, permissions and required manual checks is outstanding.
 
 ## Merge verification follow-up

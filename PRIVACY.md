@@ -35,5 +35,4 @@ Avoid posting private page contents. For sensitive reports use the route in SECU
 Policy changes will be dated here and recorded in the changelog.
 
 Intended public URL: https://qwertypants.github.io/chrome-simple-dark-mode/privacy.html
-**Pending deployment.** Public availability has not been verified; do not submit this
-URL to the store until deployed and checked without authentication.
+Published and verified at https://qwertypants.github.io/chrome-simple-dark-mode/privacy.html on 2026-10-28.

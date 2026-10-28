@@ -8,3 +8,7 @@
 - Deterministic release ZIP, privacy disclosures and static information site.
 
 No Chrome Web Store release or public Pages deployment has been verified.
+
+### Fixed
+
+- Updated the privacy policy and release documentation after the GitHub Pages deployment was verified.

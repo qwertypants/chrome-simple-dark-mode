@@ -44,7 +44,7 @@ current data-use fields against the final artifact and local-processing policy g
 Do not automatically select all "no data" answers without checking those definitions.
 
 Policy URL: https://qwertypants.github.io/chrome-simple-dark-mode/privacy.html
-Pending deployment and public verification. Source: PRIVACY.md.
+Policy is published at https://qwertypants.github.io/chrome-simple-dark-mode/privacy.html. Source: PRIVACY.md.
 
 ## Assets and publisher
 
