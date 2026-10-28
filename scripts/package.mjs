@@ -5,7 +5,7 @@ const {version}=JSON.parse(await readFile('extension/manifest.json','utf8'));
 await mkdir('release',{recursive:true});
 const target=`release/shade-toggle-${version}.zip`;
 execFileSync('python3',['-c',`import zipfile,pathlib,sys
-files=['manifest.json','background.js','content.js','popup.js','popup.html','popup.css','DARKREADER-LICENSE.txt']+[f'icons/icon-{s}.png' for s in [16,32,48,128]]
+files=['manifest.json','background.js','content.js','popup.js','popup.html','popup.css','DARKREADER-LICENSE.txt','LICENSE','THIRD_PARTY_NOTICES.md']+[f'icons/icon-{s}.png' for s in [16,32,48,128]]
 with zipfile.ZipFile(sys.argv[1],'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
  for name in sorted(files):
   data=(pathlib.Path('dist')/name).read_bytes()

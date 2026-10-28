@@ -27,6 +27,21 @@ Manually inspect article, link, input/placeholder, menu/dialog, code, keyboard f
 
 ## Package
 
-`npm run package` rebuilds `dist/` and writes `release/shade-toggle-0.1.0.zip`. The explicit file allowlist contains production manifest/background/content/popup, four local icons and bundled Dark Reader license. No test workers, localhost grants, source maps, development files, or remote scripts ship. Production has only activeTab/scripting/storage at install and optional website access. Engine network transport is disabled.
+`npm run package` rebuilds `dist/` and writes `release/shade-toggle-0.1.0.zip`. The explicit file allowlist contains production manifest/background/content/popup, four local icons, project LICENSE, THIRD_PARTY_NOTICES.md and the full bundled Dark Reader license. No test workers, localhost grants, source maps, development files, or remote scripts ship. Production has only activeTab/scripting/storage at install and optional website access. Engine network transport is disabled.
 
-Two independent build/package runs compared byte-for-byte equal using `cmp`. SHA-256 at this verification point: `1d9983fbf93aad1d768ab152addc0dfe8b1d75b68bed433395e3d63d5400cbae`. Later license/notice additions require rebuilding and recording a new final hash. ZIP timestamps and permissions are fixed; Python 3 and Node with installed lockfile dependencies are required.
+Two independent build/package runs compared byte-for-byte equal using `cmp`. SHA-256 at this verification point: `fb62d576fc3ba29617a0a4ca7155bab3e4509838892cc077689601c49d9c5934` after final license/notice additions. ZIP timestamps and permissions are fixed; Python 3 and Node with installed lockfile dependencies are required.
+
+## Homepage and publication preparation
+
+Static homepage checked in actual Chromium at 1280px and 375px widths: images decode,
+no horizontal overflow, keyboard skip link focuses/activates, disclosure control opens,
+privacy route loads, and no JavaScript errors. Screenshots were visually inspected.
+The homepage has no runtime JavaScript or third-party font requests. Text, muted text
+and link colors meet AA on the declared opaque backgrounds; this is a bounded check,
+not a complete WCAG audit. Store screenshot is actual installed Chromium rendering
+of an original contrast fixture at 1280 × 800, with pregranted localhost access; see
+store/assets/README.md. It does not verify Chrome stable or the native permission prompt.
+
+Public GitHub Pages deployment and Chrome Web Store submission/approval/live installation
+have not occurred. The policy URL remains pending deployment. Owner review of publisher
+identity, final artifact, disclosures, permissions and required manual checks is outstanding.
