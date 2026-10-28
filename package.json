@@ -1,0 +1,1 @@
+{"name":"simple-dark-mode","version":"0.1.0","private":true,"type":"module","scripts":{"build":"node scripts/build.mjs","test":"npm run test:extension","test:extension":"npm run build && playwright test"},"dependencies":{"darkreader":"4.9.134"},"devDependencies":{"@playwright/test":"1.64.1","esbuild":"0.28.2"}}

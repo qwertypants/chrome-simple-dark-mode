@@ -1,0 +1,7 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+body {background:#fff;color:#111;font:18px system-ui;margin:32px} article{max-width:700px} input,button{background:white;color:black;padding:12px;border:1px solid #555}.dark{background:#111;color:#eee;padding:20px} img,video{display:block;width:220px;height:140px;object-fit:cover} a{color:#0659b6}
+</style></head><body><article><h1>A bright article</h1><p>Readable text with a <a href="#">useful link</a>.</p><form><label>Name <input value="White form"></label><button>Save</button></form><section class="dark">Native dark surface inside a light layout</section><img src="photo.png"><video src="video.webm" poster="photo.png" preload="auto"></video><div id="shadow"></div><div id="dynamic"></div></article><script>
+const root=document.querySelector('#shadow').attachShadow({mode:'open'});root.innerHTML='<style>p{background:white;color:black;padding:12px}</style><p>Open shadow content</p>';
+const mode=new URLSearchParams(location.search).get('mode');if(mode==='dark')document.body.style.cssText='background:#111;color:#eee';if(mode==='transparent')document.body.style.background='transparent';
+window.insertDynamic=()=>{const style=document.createElement('style');style.textContent='.late{background:white;color:black;padding:10px}';document.head.append(style);document.querySelector('#dynamic').innerHTML='<p class="late">Late inserted content</p>';};
+</script></body></html>
