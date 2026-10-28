@@ -14,6 +14,11 @@ if (testing) {
   await copyFile('tests/extension/worker.js',`${outdir}/worker.js`);
 }
 await writeFile(`${outdir}/manifest.json`,JSON.stringify(manifest,null,2));
+await copyFile('extension/popup.html',`${outdir}/popup.html`);
+await copyFile('extension/popup.css',`${outdir}/popup.css`);
+await mkdir(`${outdir}/icons`,{recursive:true});
+for(const size of [16,32,48,128]) await copyFile(`extension/icons/icon-${size}.png`,`${outdir}/icons/icon-${size}.png`);
+await build({entryPoints:['src/popup.js'],bundle:true,format:'iife',outfile:`${outdir}/popup.js`});
 await copyFile('node_modules/darkreader/LICENSE',`${outdir}/DARKREADER-LICENSE.txt`);
 // The API build unconditionally injects an optional page-world proxy. Remove that
 // exact block, failing closed on upstream changes. MutationObserver support stays.
